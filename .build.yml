@@ -7,8 +7,8 @@ secrets:
 sources:
   - https://git.sr.ht/~ashton314/adapton
 environment:
-  - repo_id: 142549
-  - readme: ~/readme.html
+  repo_id: 142549
+  readme: "~/readme.html"
 tasks:
   - build: |
       cd adapton
