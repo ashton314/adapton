@@ -1,0 +1,10 @@
+#+title: microAdapton
+#+author: Ashton Wiersdorf
+#+date: 2022-06-28
+
+Implementation of micro- and miniAdapton.
+
+* See also
+
+Fisher, Dakota, Matthew A. Hammer, William Byrd, and Matthew Might. “MiniAdapton: A Minimal Implementation of Incremental Computation in Scheme.” arXiv, September 17, 2016. https://doi.org/10.48550/arXiv.1609.05337.
+
