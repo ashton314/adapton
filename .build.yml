@@ -2,17 +2,18 @@
 image: freebsd/13.x
 packages:
   - hs-pandoc
+  - jq
 secrets:
   - 804d8ca2-529a-4761-b5a5-79b0c9092336
 sources:
   - https://git.sr.ht/~ashton314/adapton
 environment:
   repo_id: 142549
-  readme: "~/readme.html"
+  readme: "/tmp/readme.html"
 tasks:
   - build: |
       cd adapton
-      pandoc README.org -o ~/readme.html
+      pandoc README.org -o $readme
   - publish: |
       jq -sR '{
           "query": "mutation UpdateRepo($id: Int!, $readme: String!) {
