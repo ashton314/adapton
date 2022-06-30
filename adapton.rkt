@@ -2,6 +2,9 @@
 
 (require racket/set)
 
+(module+ test
+  (require rackunit))
+
 ;;; microAdapton implementation
 
 (struct adapton (thunk result sub super clean?) #:transparent #:mutable)
@@ -52,3 +55,37 @@
 (define (adapton-ref-set! a val)
   (set-adapton-result! a val)
   (adapton-dirty! a))
+
+;;; miniAdapton interface
+
+(define adapton-force
+  ;; Use this in place of `adapton-compute': it keeps track of the
+  ;; adapton computation we're in and manages the DCG.
+  (let ([currently-adapting #f])
+    (λ (a)
+      (let ([prev-adapting currently-adapting])
+        (set! currently-adapting a)
+        (let ([result (adapton-compute a)])
+          (set! currently-adapting prev-adapting)
+          (when currently-adapting (adapton-add-dcg-edge! currently-adapting a))
+          result)))))
+
+(define-syntax adapt
+  ;; Convenience macro for wrapping expressions in adapton thunks
+  (syntax-rules ()
+    [(_ expr)
+     (make-athunk (λ () expr))]))
+
+;; TODO
+
+;;; Auxillary functions
+
+(define (memoize f)
+  ;; Given a function, return a memoized variant
+  (let ([cache (make-hash)])
+    (λ x
+      (hash-ref cache x
+                (λ () (let ([r (apply f x)]) (hash-set! cache x r) r))))))
+
+(module+ test
+  (test-case "memoize"))
